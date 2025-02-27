@@ -9,19 +9,19 @@ const Contact = () => {
     {
       icon: Mail,
       title: "Email",
-      details: "support@healthpredictor.com",
+      details: "support@swasthya.com",
       link: "mailto:support@healthpredictor.com"
     },
     {
       icon: Phone,
       title: "Phone",
-      details: "+1 (800) 123-4567",
+      details: "+91 123-4567-890",
       link: "tel:+18001234567"
     },
     {
       icon: MapPin,
       title: "Address",
-      details: "123 Health Street, Suite 456, Wellness City, HC 78901",
+      details: "123 Health Street, Suite 456, Punjab, India",
       link: "#"
     }
   ];

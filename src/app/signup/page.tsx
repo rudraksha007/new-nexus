@@ -22,7 +22,7 @@ const Index = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="inline-block px-4 py-1 mb-4 text-sm font-medium text-green-600 bg-green-100 rounded-full">
+          <span className="inline-block px-4 py-1 mb-4 text-sm font-medium text-green-800 bg-green-600 rounded-full">
             Health Prediction
           </span>
           <h1 className="mb-6 text-4xl font-bold text-gray-900 sm:text-5xl md:text-6xl">

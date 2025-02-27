@@ -103,19 +103,19 @@ const FamilyPrediction = () => {
               />
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 ">
               <Label>Gender</Label>
               <RadioGroup
                 value={formData.gender}
                 onValueChange={(value) => handleInputChange("gender", value)}
                 className="flex space-x-4"
               >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="male" id="male" />
+                <div className="flex items-center space-x-2 ">
+                  <RadioGroupItem className="cursor-pointer" value="male" id="male " />
                   <Label htmlFor="male">Male</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="female" id="female" />
+                  <RadioGroupItem className="cursor-pointer" value="female" id="female" />
                   <Label htmlFor="female">Female</Label>
                 </div>
               </RadioGroup>
@@ -151,7 +151,7 @@ const FamilyPrediction = () => {
           <div className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="sleepHours">Average Sleep Hours</Label>
-              <Slider
+              <Slider 
                 id="sleepHours"
                 max={12}
                 step={0.5}
@@ -159,7 +159,7 @@ const FamilyPrediction = () => {
                 onValueChange={(value) =>
                   handleInputChange("sleepHours", value[0].toString())
                 }
-                className="py-4"
+                className="py-4 cursor-pointer"
               />
               <p className="text-sm text-gray-500 text-right">
                 {formData.sleepHours || "7"} hours
@@ -176,11 +176,11 @@ const FamilyPrediction = () => {
                 {["Never", "Rarely", "Sometimes", "Often", "Daily"].map(
                   (option) => (
                     <div key={option} className="flex items-center space-x-2">
-                      <RadioGroupItem
+                      <RadioGroupItem className="cursor-pointer"
                         value={option.toLowerCase()}
                         id={option.toLowerCase()}
                       />
-                      <Label htmlFor={option.toLowerCase()}>{option}</Label>
+                      <Label  className="cursor-pointer" htmlFor={option.toLowerCase()}>{option}</Label>
                     </div>
                   )
                 )}
@@ -190,18 +190,18 @@ const FamilyPrediction = () => {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Smoking</Label>
-                <RadioGroup
+                <RadioGroup 
                   value={formData.smoking}
                   onValueChange={(value) => handleInputChange("smoking", value)}
                   className="flex space-x-4"
                 >
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="yes" id="smoking-yes" />
-                    <Label htmlFor="smoking-yes">Yes</Label>
+                    <RadioGroupItem className="cursor-pointer" value="yes" id="smoking-yes" />
+                    <Label className="cursor-pointer" htmlFor="smoking-yes">Yes</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="no" id="smoking-no" />
-                    <Label htmlFor="smoking-no">No</Label>
+                    <RadioGroupItem className="cursor-pointer" value="no" id="smoking-no" />
+                    <Label className="cursor-pointer" htmlFor="smoking-no">No</Label>
                   </div>
                 </RadioGroup>
               </div>
@@ -214,12 +214,12 @@ const FamilyPrediction = () => {
                   className="flex space-x-4"
                 >
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="yes" id="alcohol-yes" />
-                    <Label htmlFor="alcohol-yes">Yes</Label>
+                    <RadioGroupItem className="cursor-pointer" value="yes" id="alcohol-yes" />
+                    <Label className="cursor-pointer" htmlFor="alcohol-yes">Yes</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="no" id="alcohol-no" />
-                    <Label htmlFor="alcohol-no">No</Label>
+                    <RadioGroupItem className="cursor-pointer" value="no" id="alcohol-no" />
+                    <Label className="cursor-pointer" htmlFor="alcohol-no">No</Label>
                   </div>
                 </RadioGroup>
               </div>
@@ -257,18 +257,18 @@ const FamilyPrediction = () => {
 
             <div className="space-y-2">
               <Label>ECG Results</Label>
-              <RadioGroup
+              <RadioGroup 
                 value={formData.ecg}
                 onValueChange={(value) => handleInputChange("ecg", value)}
                 className="flex space-x-4"
               >
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="normal" id="ecg-normal" />
-                  <Label htmlFor="ecg-normal">Normal</Label>
+                  <RadioGroupItem className="cursor-pointer" value="normal" id="ecg-normal" />
+                  <Label className="cursor-pointer" htmlFor="ecg-normal">Normal</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="abnormal" id="ecg-abnormal" />
-                  <Label htmlFor="ecg-abnormal">Abnormal</Label>
+                  <RadioGroupItem className="cursor-pointer" value="abnormal" id="ecg-abnormal" />
+                  <Label className="cursor-pointer" htmlFor="ecg-abnormal">Abnormal</Label>
                 </div>
               </RadioGroup>
             </div>
@@ -288,11 +288,11 @@ const FamilyPrediction = () => {
                 {["Excellent", "Good", "Moderate", "Poor", "Very Poor"].map(
                   (option) => (
                     <div key={option} className="flex items-center space-x-2">
-                      <RadioGroupItem
+                      <RadioGroupItem className="cursor-pointer"
                         value={option.toLowerCase()}
                         id={`air-${option.toLowerCase()}`}
                       />
-                      <Label htmlFor={`air-${option.toLowerCase()}`}>
+                      <Label className="cursor-pointer" htmlFor={`air-${option.toLowerCase()}`}>
                         {option}
                       </Label>
                     </div>
