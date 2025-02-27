@@ -1,0 +1,114 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String                 @id @unique @default(uuid())
+  name                  String
+  email                 String                 @unique
+  password              String
+  age                   Int
+  gender                String
+  height                Float
+  weight                Float
+  activity              Activity[]
+  healthData            HealthData?
+  gamification          Gamification?
+  mealPlan              MealPlan?
+  doctorRecommendations DoctorRecommendation[]
+  suggestions           Suggestion[]
+  clans                 Clan[]
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+}
+
+model Activity {
+  id       String   @id @default(uuid())
+  userId   String
+  user     User     @relation(fields: [userId], references: [id])
+  type     String // Walking, Running, Sleeping, etc.
+  duration Int      @default(0)
+  calories Float
+  date     DateTime @default(now())
+}
+
+model HealthData {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id])
+  bloodPressure String?
+  heartRate     Int?
+  glucoseLevel  Float?
+  sleepHours    Float?
+  stressLevel   Int? // Scale from 1-10
+  bmi           Float?
+  riskScore     Float? // AI-predicted risk score
+  createdAt     DateTime @default(now())
+}
+
+model Suggestion {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id])
+  type        String // Habit change, exercise, food
+  description String
+  createdAt   DateTime @default(now())
+}
+
+model Gamification {
+  id         String      @id @default(uuid())
+  user       User        @relation(fields: [userId], references: [id])
+  userId     String      @unique
+  points     Int         @default(0)
+  level      Int         @default(1)
+  challenges Challenge[]
+}
+
+model Challenge {
+  id             String       @id @default(uuid())
+  gamification   Gamification @relation(fields: [gamificationId], references: [id])
+  gamificationId String
+  type           String
+  rewardPoints   Int
+  completed      Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+}
+
+model Clan {
+  id        String   @id @default(uuid())
+  users     User[]
+  userIds   String[]
+  score     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model MealPlan {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  mealType  String // Breakfast, Lunch, Dinner
+  foods     String // JSON string of recommended foods
+  createdAt DateTime @default(now())
+}
+
+model DoctorRecommendation {
+  id             String   @id @default(uuid())
+  user           User     @relation(fields: [userId], references: [id])
+  userId         String
+  doctorName     String
+  specialization String
+  location       String
+  contactInfo    String
+  createdAt      DateTime @default(now())
+}
