@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="grid md:grid-cols-4 gap-8">
           <div className="col-span-2">
             <h3 className="text-xl font-semibold text-gray-900 mb-4">
-              Health Predictor AI
+              SWASTHYA
             </h3>
             <p className="text-gray-600 mb-4 max-w-sm">
               Empowering individuals with AI-driven health insights for a better tomorrow.
@@ -46,7 +46,7 @@ const Footer = () => {
         
         <div className="mt-12 pt-8 border-t border-gray-100">
           <p className="text-center text-gray-600 text-sm">
-            © {new Date().getFullYear()} Health Predictor AI. All rights reserved.
+            © {new Date().getFullYear()} SWASTHYA. All rights reserved.
           </p>
         </div>
       </div>
