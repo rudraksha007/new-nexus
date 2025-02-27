@@ -78,7 +78,7 @@ export async function GET() {
 
       // Get last 7 days of step data
       const now = Date.now();
-      const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
+      const sevenDaysAgo = now - 24 * 60 * 60 * 1000;
 
       const response = await fitness.users.dataset.aggregate({
         userId: "me",
