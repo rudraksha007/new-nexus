@@ -17,7 +17,7 @@ const Navbar = () => {
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="text-xl font-semibold text-green-800">
-            Health Predictor AI
+            SWASTHYA
           </Link>
 
           <div className="hidden md:flex space-x-8">
