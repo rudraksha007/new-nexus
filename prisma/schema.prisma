@@ -8,6 +8,20 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum ExerciseLevel {
+  NEVER
+  RARELY
+  SOMETIMES
+  OFTEN
+  DAILY
+}
+
+enum ECGType {
+  NORMAL
+  ABNORMAL
+  UNKNOWN
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -15,22 +29,36 @@ datasource db {
 
 model User {
   id                    String                 @id @unique @default(uuid())
+  clerkId               String                 @unique
   name                  String
   email                 String                 @unique
-  password              String
   age                   Int
   gender                String
   height                Float
   weight                Float
   activity              Activity[]
   healthData            HealthData?
-  gamification          Gamification?
-  mealPlan              MealPlan?
+  exercise              ExerciseLevel          @default(SOMETIMES)
   doctorRecommendations DoctorRecommendation[]
   suggestions           Suggestion[]
   clans                 Clan[]
+  sleepHours            Float?
+  smoking               Boolean                @default(false)
+  alcohol               Boolean                @default(false)
+  diet                  String?
+  calorieIntake         Float?
+  bmi                   Float?
+  bloodPressure         String?
+  sugarLevels           String?
+  ecg                   ECGType                @default(UNKNOWN)
+  airQuality            String?
+  pollution             String?
+  existingConditions    String?
+  pastConditions        String?
   createdAt             DateTime               @default(now())
   updatedAt             DateTime               @updatedAt
+  Gamification          Gamification?
+  MealPlan              MealPlan?
 }
 
 model Activity {

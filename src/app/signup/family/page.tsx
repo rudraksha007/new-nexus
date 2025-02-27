@@ -37,27 +37,22 @@ const FamilyPrediction = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const navigate = useRouter();
   const [formData, setFormData] = useState({
-    // Basic Info
     age: "",
     gender: "",
     weight: "",
     height: "",
-    // Lifestyle
     sleepHours: "",
     exercise: "",
     smoking: "no",
     alcohol: "no",
     diet: "",
     calorieIntake: "",
-    // Health Metrics
     bmi: "",
     bloodPressure: "",
     sugarLevels: "",
     ecg: "normal",
-    // Environmental
     airQuality: "",
     pollution: "",
-    // Medical History
     existingConditions: "",
     pastConditions: "",
   });
@@ -79,12 +74,17 @@ const FamilyPrediction = () => {
       navigate.back();
     }
   };
-
   const handleSubmit = (e: React.FormEvent) => {        
     e.preventDefault();
     // Handle form submission
     console.log(formData);
     // Navigate to results or process data
+    fetch("/api/collect", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({data: formData}),
+    })
+      .then((res) => {if(res.ok) {navigate.push('/')}})
   };
 
   const renderStep = () => {
