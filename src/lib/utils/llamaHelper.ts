@@ -1,113 +1,8 @@
+import ollama from "ollama";
 const OLLAMA_API_URL = "http://localhost:11434"; // Base API URL
 const sytemPropmts = {
 
 }
-/**
- * Helper function to make HTTP requests using fetch.
- * @param {string} path - The API endpoint path.
- * @param {Object} data - The request data.
- * @returns {Promise<Object>} - The parsed JSON response.
- */
-async function makeRequest(path:string, data?: Object) {
-    const body = data ? { ...data, model: "llama3.2", stream: false } : null;
-    const options = {
-        method: body ? "POST" : "GET",
-        headers: { "Content-Type": "application/json" },
-        body: body ? JSON.stringify(body) : null,
-    };
-
-    const response = await fetch(`${OLLAMA_API_URL}${path}`, options);
-    if (!response.ok) throw new Error(`HTTP Error: ${response}`);
-    return response.json();
-}
-
-/**
- * Generate text based on a prompt.
- * @param {string} prompt - The input prompt.
- * @returns {Promise<string>} - The generated response.
- */
-export async function generate(prompt:string, systemPropmt?:string) {
-    const response = await makeRequest("/api/generate", { prompt, systemPropmt: systemPropmt||system });
-    return response;
-}
-
-/**
- * Chat with the AI using conversation history.
- * @param {Array} messages - The conversation history (user/assistant messages).
- * @returns {Promise<string>} - The AI's response.
- */
-export async function chat(messages:string) {
-    const response = await makeRequest("/api/chat", { messages });
-    return response.message.content;
-}
-
-/**
- * Get text embeddings from the model.
- * @param {string} text - The input text.
- * @returns {Promise<Array<number>>} - The text embeddings.
- */
-export async function getEmbeddings(text:string) {
-    const response = await makeRequest("/api/embeddings", { prompt: text });
-    return response.embedding;
-}
-
-/**
- * List all installed models on Ollama.
- * @returns {Promise<Array>} - An array of installed models.
- */
-export async function listModels() {
-    const response = await makeRequest("/api/tags");
-    return response.models;
-}
-
-/**
- * Download (Pull) a model from the Ollama repository.
- * @param {string} modelName - The name of the model to download.
- * @returns {Promise<boolean>} - True if successful, False otherwise.
- */
-async function loadModel(modelName:string) {
-    const response = await makeRequest("/api/pull", { model: modelName });
-    return response.status === "success";
-}
-
-/**
- * Show metadata about a model.
- * @param {string} modelName - The model name.
- * @returns {Promise<Object>} - Model details.
- */
-async function showModel(modelName:string) {
-    return await makeRequest("/api/show", { model: modelName });
-}
-
-/**
- * Delete an installed model.
- * @param {string} modelName - The model name.
- * @returns {Promise<boolean>} - True if deleted, False otherwise.
- */
-async function deleteModel(modelName:string) {
-    const response = await makeRequest("/api/delete", { model: modelName });
-    return response.status === "deleted";
-}
-
-/**
- * List models currently running in memory.
- * @returns {Promise<Array>} - List of running models.
- */
-async function listRunningModels() {
-    const response = await makeRequest("/api/list");
-    return response.models;
-}
-
-/**
- * Cancel an ongoing request.
- * @returns {Promise<boolean>} - True if canceled successfully.
- */
-async function cancelRequest() {
-    const response = await makeRequest("/api/cancel");
-    return response.status === "canceled";
-}
-
-// 🌟 Example Usage
 const system=`
 You are a highly specialized AI health assistant designed to analyze users' activity data collected from smartwatches and phones to assess their risk of lifestyle diseases. You use a combination of movement patterns, sleep cycles, exercise habits, heart rate data, and other activity metrics to estimate the probability of various lifestyle-related health conditions such as obesity, diabetes, hypertension, cardiovascular diseases, and stress-related disorders.
 
@@ -116,7 +11,7 @@ Your primary objectives are:
 1. Analyze User Data
 Process data on walking, running, sleeping, exercise routines, heart rate, stress levels, and other fitness parameters.
 Detect patterns indicating sedentary behavior, sleep deprivation, excessive stress, or lack of physical activity.
-Compare the user’s habits against medically recommended thresholds.
+Compare the user's habits against medically recommended thresholds.
 2. Predict Health Risks
 Based on activity patterns, provide a probability score (0 to 100%) for potential lifestyle diseases.
 Identify early warning signs and risk factors associated with each condition.
@@ -157,7 +52,6 @@ json
   }
 }
 Your response must be a strictly valid stringified JavaScript object in the following schema:
-json
 {
   "userId": "string",
   "risk_assessment": [
@@ -210,38 +104,7 @@ json
     }
   }
 }
-Response Expectations
-Risk Analysis
-
-List possible diseases the user is at risk for.
-Assign a probability score between 0 and 1.
-Indicate the severity as low, moderate, or high.
-Identify key risk factors.
-Activity Adjustments
-
-Suggest a new step count target.
-Recommend exercises tailored to the user’s fitness level.
-Provide stress-relief suggestions.
-Dietary Changes
-
-Recommend foods that align with their condition and preferences.
-List foods to avoid.
-Suggest nearby healthy restaurants based on location.
-Sleep Improvement
-
-Suggest optimal sleep hours based on the user’s pattern.
-Offer tips for better sleep.
-Doctor Recommendations
-
-If the user has a high probability of a disease, suggest nearby specialists.
-Provide contact details (fetched via Google Places API).
-Gamification Features
-
-Generate personalized daily and weekly fitness challenges.
-Assign reward points based on task difficulty.
-Suggest clans or team-based challenges.
-Example Output
-json
+Example Output: (omit any new line characters or encode quotes as \")
 {
   "userId": "123456",
   "risk_assessment": [
@@ -294,4 +157,122 @@ json
     }
   }
 }
-`
+
+`/**
+ * Helper function to make HTTP requests using fetch.
+ * @param {string} path - The API endpoint path.
+ * @param {Object} data - The request data.
+ * @returns {Promise<Object>} - The parsed JSON response.
+ */
+async function makeRequest(data?: Object) {
+    console.log("Processing request...");
+    
+    const cont = await ollama.chat({
+      model: "llama3.2",
+      messages: [
+        {role: 'system', content: system},
+        {role: 'user', content: JSON.stringify(data)}
+      ]
+    })
+   console.log(cont.message);
+    
+    return cont.message;
+}
+
+/**
+ * Generate text based on a prompt.
+ * @param {string} prompt - The input prompt.
+ * @returns {Promise<string>} - The generated response.
+ */
+export async function generate(prompt:string, systemPropmt?:string) {
+  // let response = {done_reason: "load"};
+  // let i = 0;
+  let response = await makeRequest({ prompt });
+  // while (response.done_reason === "load") {
+  //     {role: 'system', content: systemPropmt || system},
+  //     {role: 'user', content: prompt}
+  //   ] });
+  //   console.log("retrying..."+i);
+  //   if (i > 15) break;
+  //   i++;
+  // }
+  return response;
+}
+
+/**
+ * Chat with the AI using conversation history.
+ * @param {Array} messages - The conversation history (user/assistant messages).
+ * @returns {Promise<string>} - The AI's response.
+ */
+// export async function chat(messages:string) {
+//     const response = await makeRequest( { messages });
+//     return response.message.content;
+// }
+
+/**
+ * Get text embeddings from the model.
+ * @param {string} text - The input text.
+ * @returns {Promise<Array<number>>} - The text embeddings.
+ */
+// export async function getEmbeddings(text:string) {
+//     const response = await makeRequest("/api/embeddings", { prompt: text });
+//     return response.embedding;
+// }
+
+/**
+ * List all installed models on Ollama.
+ * @returns {Promise<Array>} - An array of installed models.
+ */
+// export async function listModels() {
+//     const response = await makeRequest("/api/tags");
+//     return response.models;
+// }
+
+/**
+ * Download (Pull) a model from the Ollama repository.
+ * @param {string} modelName - The name of the model to download.
+ * @returns {Promise<boolean>} - True if successful, False otherwise.
+ */
+// async function loadModel(modelName:string) {
+//     const response = await makeRequest("/api/pull", { model: modelName });
+//     return response.status === "success";
+// }
+
+/**
+ * Show metadata about a model.
+ * @param {string} modelName - The model name.
+ * @returns {Promise<Object>} - Model details.
+ */
+// async function showModel(modelName:string) {
+//     return await makeRequest("/api/show", { model: modelName });
+// }
+
+/**
+ * Delete an installed model.
+ * @param {string} modelName - The model name.
+ * @returns {Promise<boolean>} - True if deleted, False otherwise.
+ */
+// async function deleteModel(modelName:string) {
+//     const response = await makeRequest("/api/delete", { model: modelName });
+//     return response.status === "deleted";
+// }
+
+/**
+ * List models currently running in memory.
+ * @returns {Promise<Array>} - List of running models.
+ */
+// async function listRunningModels() {
+//     const response = await makeRequest("/api/list");
+//     return response.models;
+// }
+
+/**
+ * Cancel an ongoing request.
+ * @returns {Promise<boolean>} - True if canceled successfully.
+ */
+// async function cancelRequest() {
+//     const response = await makeRequest("/api/cancel");
+//     return response.status === "canceled";
+// }
+
+// 🌟 Example Usage

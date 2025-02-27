@@ -39,6 +39,8 @@ function Prediction() {
     };
 
     useEffect(() => {
+        console.log("Fetching data from the LLAMA");
+        
         fetch("/api/query", {
             method: 'POST',
             headers: {
@@ -79,7 +81,8 @@ function Prediction() {
                     }
                 }
             })
-        }).then(resp=>resp.json()).then(data=>console.log(data));
+    }).then(resp=>resp.json()).then(data=>{console.log(JSON.parse(data.content))}
+        );
     }
         , []);
 
