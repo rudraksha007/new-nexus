@@ -1,5 +1,5 @@
 'use client';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
-const Prediction = () => {
+function Prediction() {
     const [formData, setFormData] = useState({
         age: "",
         weight: "",
@@ -37,6 +37,51 @@ const Prediction = () => {
             },
         });
     };
+
+    useEffect(() => {
+        fetch("/api/query", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                prompt: {
+                    userId: "user_001",
+                    age: 30,
+                    gender: "male",
+                    height_cm: 175,
+                    weight_kg: 85,
+                    bmi: 27.8,
+                    heart_rate: {
+                        resting: 80,
+                        average: 95,
+                        max: 160
+                    },
+                    activity: {
+                        steps: 6500,
+                        walking_distance_km: 4,
+                        running_distance_km: 1,
+                        exercise_minutes: 30,
+                        calories_burned: 1800
+                    },
+                    sleep: {
+                        total_hours: 6,
+                        deep_sleep_hours: 1.5,
+                        rem_sleep_hours: 2
+                    },
+                    stress_level: 7,
+                    diet_preferences: ["vegetarian", "low-carb"],
+                    existing_conditions: ["pre-hypertension"],
+                    symptoms: ["frequent headaches", "fatigue"],
+                    location: {
+                        latitude: 28.6139,
+                        longitude: 77.2090
+                    }
+                }
+            })
+        }).then(resp=>resp.json()).then(data=>console.log(data));
+    }
+        , []);
 
     return (
         <div className="min-h-screen bg-white">
