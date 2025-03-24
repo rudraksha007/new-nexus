@@ -158,6 +158,8 @@ Example Output: (omit any new line characters or encode quotes as \")
   }
 }
 
+
+
 `/**
  * Helper function to make HTTP requests using fetch.
  * @param {string} path - The API endpoint path.
